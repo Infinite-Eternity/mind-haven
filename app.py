@@ -66,5 +66,7 @@ def create_post():
         return jsonify({'error': 'Internal server error'}), 500
 
 
+port = int(os.environ.get('PORT', 5000))
+# 启动应用，监听所有网络接口（'0.0.0.0'），并端口
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', port=port, debug=False)
