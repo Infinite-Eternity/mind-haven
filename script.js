@@ -1,5 +1,7 @@
 // API的基础URL，指向你本地运行的Flask服务器
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:5000/api'
+    : 'https://your-backend-url.railway.app/api'; // 这个URL我们下一步部署完后端后再来更新
 
 // 用于存储树洞帖子的数组 (现在将从后端获取)
 let posts = [];
