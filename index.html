@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心灵港湾 - 青少年心理健康支持平台</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">🌱 心灵港湾</h1>
+            <ul class="nav-menu">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#treehole">心灵树洞</a></li>
+                <li><a href="#resources">自助资源</a></li>
+                <li><a href="#about">关于我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content" id="home">
+        <!-- 英雄区域 -->
+        <section class="hero">
+            <h2>一个安全、温暖的倾诉空间</h2>
+            <p>这里属于每一位青少年，分享你的心事，感受同伴的支持，让我们共同成长。</p>
+        </section>
+
+        <!-- 树洞发布区 -->
+        <section class="post-section" id="treehole">
+            <h3>把你的心事说给树洞听</h3>
+            <div class="input-area">
+                <textarea id="post-content" placeholder="今天发生了什么？有什么想聊的吗？(内容完全匿名)"></textarea>
+                <button onclick="publishPost()">匿名发布</button>
+            </div>
+        </section>
+
+        <!-- 内容展示区 -->
+        <section class="posts-container">
+            <h3>大家的树洞</h3>
+            <div id="posts-list">
+                <!-- 动态内容会由JavaScript填充 -->
+                <p class="empty-tip">树洞里还没有声音... 成为第一个分享的人吧！</p>
+            </div>
+        </section>
+
+        <!-- AI伙伴区域 -->
+        <section class="ai-chat">
+            <h3>🤖 AI伙伴（小港湾）</h3>
+            <div class="chat-box">
+                <div id="chat-messages">
+                    <div class="message ai-message">
+                        <p>你好！我是你的AI伙伴小港湾。如果你感到压力大、迷茫或者只是想聊聊天，我随时都在这里。今天有什么想分享的吗？</p>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="user-input" placeholder="输入你想说的话...">
+                    <button onclick="sendMessage()">发送</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>⚠️ 重要提示：这是一个演示项目，非专业心理服务平台。如需专业帮助，请拨打心理援助热线: <strong>12320-5</strong></p>
+    </footer>
+
+    <!-- 引入JavaScript文件 -->
+    <script src="script.js"></script>
+</body>
+</html>
