@@ -1,8 +1,30 @@
-// 用于存储树洞帖子的数组
+// API的基础URL，指向你本地运行的Flask服务器
+const API_BASE_URL = 'http://localhost:5000/api';
+
+// 用于存储树洞帖子的数组 (现在将从后端获取)
 let posts = [];
 
+// 页面加载完成后，自动加载帖子
+document.addEventListener('DOMContentLoaded', function() {
+    loadPosts();
+});
+
+// 从后端加载帖子
+async function loadPosts() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/posts`);
+        posts = await response.json();
+        renderPosts();
+    } catch (error) {
+        console.error('获取帖子失败:', error);
+        // 如果后端不可用，显示错误信息但仍然保留页面其他功能
+        document.getElementById('posts-list').innerHTML = 
+            '<p class="empty-tip">暂时无法加载树洞内容，请检查后端服务器是否运行。</p>';
+    }
+}
+
 // 发布新帖子
-function publishPost() {
+async function publishPost() {
     const postContent = document.getElementById('post-content').value.trim();
     
     if (!postContent) {
@@ -10,20 +32,26 @@ function publishPost() {
         return;
     }
     
-    // 创建新帖子对象
-    const newPost = {
-        content: postContent,
-        timestamp: new Date().toLocaleString('zh-CN')
-    };
-    
-    // 添加到帖子数组
-    posts.unshift(newPost); // 新帖子放在最前面
-    
-    // 清空输入框
-    document.getElementById('post-content').value = '';
-    
-    // 更新页面显示
-    renderPosts();
+    try {
+        const response = await fetch(`${API_BASE_URL}/posts`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: postContent })
+        });
+        
+        if (response.ok) {
+            // 发布成功，清空输入框并重新加载帖子列表
+            document.getElementById('post-content').value = '';
+            loadPosts(); // 重新从服务器获取最新列表
+        } else {
+            alert('发布失败！');
+        }
+    } catch (error) {
+        console.error('发布帖子失败:', error);
+        alert('发布失败，请检查网络连接和后端服务器。');
+    }
 }
 
 // 渲染帖子列表
@@ -35,7 +63,7 @@ function renderPosts() {
         return;
     }
     
-    // 生成帖子HTML
+    // 生成帖子HTML (新帖子在前)
     postsList.innerHTML = posts.map(post => `
         <div class="post">
             <p>${post.content}</p>
@@ -109,6 +137,15 @@ function generateAIResponse(userInput) {
     else if (userInput.includes('谢谢') || userInput.includes('感谢')) {
         return "不用客气！我很高兴能陪伴你。记住，你并不孤单。";
     }
+    else if (userInput.includes('你好') || userInput.includes('嗨') || userInput.includes('hello')) {
+        return "你好！我是你的AI伙伴小港湾。如果你感到压力大、迷茫或者只是想聊聊天，我随时都在这里。今天有什么想分享的吗？";
+    }
+    else if (userInput.includes('失眠') || userInput.includes('睡不着')) {
+        return "失眠确实令人困扰。试着睡前一小时避免使用电子设备，喝杯温热的牛奶，或者听一些轻柔的音乐可能会有帮助。";
+    }
+    else if (userInput.includes('未来') || userInput.includes('迷茫')) {
+        return "对未来感到迷茫是很正常的，每个人都会经历这个阶段。试着从小事做起，专注于当下，未来的道路会慢慢清晰起来的。";
+    }
     else {
         // 默认回复
         const defaultResponses = [
@@ -116,13 +153,10 @@ function generateAIResponse(userInput) {
             "我在这里倾听。如果你想聊聊更多，我随时都在。",
             "我理解这种感觉。生活中总会有起起落落，这都是成长的一部分。",
             "你的感受很重要。记住，照顾好自己的情绪健康是勇敢的表现。",
-            "不确定该怎么帮你，但我真的很关心你的感受。想多聊一些吗？"
+            "不确定该怎么帮你，但我真的很关心你的感受。想多聊一些吗？",
+            "感谢你愿意分享这些。有时候，仅仅是表达出来就能减轻内心的负担。",
+            "我明白这不容易。你正在经历的事情，很多人也都曾经历过，你并不孤单。"
         ];
         return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
     }
 }
-
-// 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', function() {
-    renderPosts();
-});
